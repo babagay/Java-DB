@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="connection.characterEncoding">UTF-8</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/postgres</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
+        <property name="connection.username">postgres</property>
+        <property name="connection.password">1111</property>
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQL82Dialect</property>
+        <!-- Output SQL to console-->
+        <property name="hibernate.show_sql">true</property>
+        <property name="format_sql">true</property>
+        <!-- Auto create DB structure -->
+        <!-- <property name="hibernate.hbm2ddl.auto">update</property>-->
+        <!-- DB schema will be updated if needed -->
+        <!-- <property name="hbm2ddl.auto">update</property> -->
+        <!-- Or created -->
+        <!-- <property name="hibernate.hbm2ddl.auto">create</property>-->
+        <!-- Other options-->
+        <!--<property name="hibernate.archive.autodetection">class,hbm</property>-->
+        <!--<property name="hibernate.connection.url">jdbc:hsqldb:mem:howtodoinjava</property>-->
+        <!--<property name="hibernate.c3p0.min_size">5</property>-->
+        <!--<property name="hibernate.c3p0.max_size">20</property>-->
+        <!--<property name="hibernate.c3p0.acquire_increment">1800</property>-->
+        <!--<property name="hibernate.c3p0.max_statements">150</property>-->
+
+        <mapping class="Entity.Developers"/>
+
+
+        <!--<mapping class="main.java.ProjectManagement.CompaniesEntity"/>-->
+        <!--<mapping class="main.java.ProjectManagement.CompaniesToProjectsEntity"/>-->
+        <!--<mapping class="main.java.ProjectManagement.CustomersEntity"/>-->
+        <!--<mapping class="main.java.ProjectManagement.CustomersToProjectsEntity"/>-->
+        <!--<mapping class="main.java.ProjectManagement.ProjectsEntity"/>-->
+        <!--<mapping class="main.java.ProjectManagement.DevelopersToProjectsEntity"/>-->
+
+
+        <!--<mapping class="Entity.DevelopersToSkills"/>     -->
+        <!--<mapping class="Entity.Skills"/>-->
+ 
+
+
+    </session-factory>
+</hibernate-configuration>

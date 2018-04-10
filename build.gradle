@@ -1,0 +1,17 @@
+group 'TestHibernate'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.hibernate', name: 'hibernate-core', version:'5.2.16.Final'
+    compile group: 'org.postgresql', name: 'postgresql', version:'42.2.2' // https://github.com/pgjdbc/pgjdbc
+    compile group: 'org.jboss.logging', name: 'jboss-logging', version:'3.3.2.Final'
+    compile group: 'javassist', name: 'javassist', version:'3.12.1.GA'
+}
