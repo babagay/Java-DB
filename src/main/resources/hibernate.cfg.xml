@@ -27,20 +27,19 @@
         <!--<property name="hibernate.c3p0.acquire_increment">1800</property>-->
         <!--<property name="hibernate.c3p0.max_statements">150</property>-->
 
-        <mapping class="Entity.Developers"/>
+        <mapping class="Entity.Developer"/>
+        <mapping class="Entity.Skill"/>
+        <mapping class="Entity.DevelopersToSkills"/>
+        <mapping class="Entity.Customer"/>
+        <mapping class="Entity.Company"/>
+        <mapping class="Entity.Project"/>
+        <mapping class="Entity.CompaniesToProjects"/>
+        <mapping class="Entity.CustomersToProjects"/>
+        <mapping class="Entity.DevelopersToProjects"/>
 
 
-        <!--<mapping class="main.java.ProjectManagement.CompaniesEntity"/>-->
-        <!--<mapping class="main.java.ProjectManagement.CompaniesToProjectsEntity"/>-->
-        <!--<mapping class="main.java.ProjectManagement.CustomersEntity"/>-->
-        <!--<mapping class="main.java.ProjectManagement.CustomersToProjectsEntity"/>-->
-        <!--<mapping class="main.java.ProjectManagement.ProjectsEntity"/>-->
-        <!--<mapping class="main.java.ProjectManagement.DevelopersToProjectsEntity"/>-->
 
 
-        <!--<mapping class="Entity.DevelopersToSkills"/>     -->
-        <!--<mapping class="Entity.Skills"/>-->
- 
 
 
     </session-factory>

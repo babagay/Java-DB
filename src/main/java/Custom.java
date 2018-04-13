@@ -1,4 +1,7 @@
-import Entity.Developers;
+import Entity.Developer;
+import Entity.DevelopersToSkills;
+import Entity.Rate;
+import Entity.Skill;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -6,6 +9,8 @@ import org.hibernate.boot.registry.BootstrapServiceRegistry;
 import org.hibernate.boot.registry.BootstrapServiceRegistryBuilder;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 
 
 /**
@@ -22,8 +27,13 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
  * Transient
  * Lob
  */
+import java.util.Collection;
 import java.util.List;
 
+/**
+ * [автозагрузчик сущностей]
+ * https://stackoverflow.com/questions/32824823/hibernate-mapping-classes-from-hibernate-cfg-xml
+ */
 public class Custom {
 
     private SessionFactory sessionFactory;
@@ -45,22 +55,70 @@ public class Custom {
 
         Session session = app.sessionFactory.openSession();
 
-        session.beginTransaction();
+        try {
+            session.beginTransaction();
 
-        //        String HQL = "from Developers d where d.name like 'Alex%' ";
-        //        List<Developers> result = session.createQuery( HQL, Developers.class ).list();
+            //        String HQL = "from Developer d where d.name like 'Alex%' ";
+            //        List<Developer> result = session.createQuery( HQL, Developer.class ).list();
 
-        String SQL = "select * from developers d where name like 'Alex%'";
-        List<Developers> result = session.createNativeQuery( SQL, Developers.class ).list();
-
-        session.getTransaction().commit();
-
-        session.close();
+            String SQL = "select * from developers d where name like 'Alex%'";
+            List<Developer> result = session.createNativeQuery( SQL, Developer.class ).list();
 
 
-        System.out.println( result );
+            Developer item = result.stream()
+                    .filter( developers -> developers.getName().equals( "Alex" ) )
+                    .findFirst()
+                    .orElse( null );
 
-        app.close();
+            if ( item != null )
+                System.out.println( item.getName() );
+            else {
+                System.out.println(result.get( 0 ).getName());
+            }
+
+//            SQL = "SELECT " +
+//
+//                    "  DISTINCT ON (d2.name) d2.name AS name, " +
+//                    "  s.title title, " +
+//                    "  s.rate, s.id AS id " +
+//
+//                    "FROM skills S\n" +
+//                    "JOIN developers_to_skills dts ON S.id = dts.skill_id\n" +
+//                    "JOIN developers d2 ON dts.developer_id = d2.id\n" +
+//                    "ORDER BY name, title";
+
+            SQL = "SELECT\n" +
+                    "\n" +
+                    "  d2.name As name,\n" +
+                    "  s.title title,\n" +
+                    "  s.rate, s.id AS id \n" +
+                    "\n" +
+                    "FROM skills S\n" +
+                    "JOIN developers_to_skills dts ON S.id = dts.skill_id\n" +
+                    "JOIN developers d2 ON dts.developer_id = d2.id\n" +
+                    "  where s.rate = 'Middle' and title = 'Java'\n" +
+                    "ORDER BY s.rate";
+
+            List<Skill> result2 = session.createNativeQuery( SQL, Skill.class ).list();
+
+            // [!] Почему все три девелопера лежат в каждом из трех айтемов списка
+            result2.get( 0 )
+                    .getDevelopersToSkillsById().stream()
+                    .map( DevelopersToSkills::getDeveloperByDeveloperId )
+                    .map( Developer::getName )
+                    .forEach( System.out::println );
+
+
+            session.getTransaction().commit();
+
+        } catch ( Throwable throwable ){
+            throwable.printStackTrace();
+        } finally {
+            session.close();
+            app.close();
+        }
+
+
     }
 
     void bootstrap()
@@ -94,6 +152,7 @@ public class Custom {
             // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
             // so destroy it manually.
             StandardServiceRegistryBuilder.destroy( registry );
+            e.printStackTrace();
         }
     }
 

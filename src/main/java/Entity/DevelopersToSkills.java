@@ -10,11 +10,11 @@ import java.util.Objects;
 public class DevelopersToSkills {
     private int developerId;
     private int skillId;
-    private Developers developersByDeveloperId;
-    private Skills skillsBySkillId;
+    private Developer developerByDeveloperId;
+    private Skill skillBySkillId;
 
     @Id
-    @Column (name = "developer_id", nullable = false)
+    @Column (name = "developer_id", nullable = false )
     public int getDeveloperId()
     {
         return developerId;
@@ -59,26 +59,26 @@ public class DevelopersToSkills {
     }
 
     @ManyToOne
-    @JoinColumn (name = "developer_id", referencedColumnName = "id", nullable = false)
-    public Developers getDevelopersByDeveloperId()
+    @JoinColumn (name = "developer_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public Developer getDeveloperByDeveloperId()
     {
-        return developersByDeveloperId;
+        return developerByDeveloperId;
     }
 
-    public void setDevelopersByDeveloperId(Developers developersByDeveloperId)
+    public void setDeveloperByDeveloperId(Developer dev)
     {
-        this.developersByDeveloperId = developersByDeveloperId;
+        developerByDeveloperId = dev;
     }
 
     @ManyToOne
-    @JoinColumn (name = "skill_id", referencedColumnName = "id", nullable = false)
-    public Skills getSkillsBySkillId()
+    @JoinColumn (name = "skill_id", referencedColumnName = "id", nullable = false, insertable = false, updatable = false)
+    public Skill getSkillBySkillId()
     {
-        return skillsBySkillId;
+        return skillBySkillId;
     }
 
-    public void setSkillsBySkillId(Skills skillsBySkillId)
+    public void setSkillBySkillId(Skill skillBySkillId)
     {
-        this.skillsBySkillId = skillsBySkillId;
+        this.skillBySkillId = skillBySkillId;
     }
 }

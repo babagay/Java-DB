@@ -3,16 +3,21 @@ package Entity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 
 @Entity
 @Table (name = "developers", schema = "public", catalog = "postgres")
-public class Developers {
+public class Developer {
     private int id;
     private String name;
     private int age;
     private String address;
     private BigDecimal salary;
+
+    private Collection<DevelopersToProjects> projectsByDeveloperId;
+    private Collection<DevelopersToSkills> developersToSkills;
 
     @Id
     @Column (name = "id", nullable = false)
@@ -63,7 +68,7 @@ public class Developers {
     }
 
     @Basic
-    @Column (name = "SALARY", nullable = true, precision = 3)
+    @Column (name = "salary", nullable = true, precision = 3)
     public BigDecimal getSalary()
     {
         return salary;
@@ -72,6 +77,30 @@ public class Developers {
     public void setSalary(BigDecimal salary)
     {
         this.salary = salary;
+    }
+
+    // [!] название метода не адекватное - надо уточнить его назначение
+    @OneToMany (mappedBy = "developerByDeveloperId")
+    public Collection<DevelopersToProjects> getDevelopersToProjectsById()
+    {
+        return projectsByDeveloperId;
+    }
+
+    public void setDevelopersToProjectsById(Collection<DevelopersToProjects> projectsByDeveloperId)
+    {
+        this.projectsByDeveloperId = projectsByDeveloperId;
+    }
+
+    // [!] уточнить название метода исходя из функции
+    @OneToMany (mappedBy = "developerByDeveloperId")
+    public Collection<DevelopersToSkills> getDevelopersToSkillsById()
+    {
+        return developersToSkills;
+    }
+
+    public void setDevelopersToSkillsById(Collection<DevelopersToSkills> developersToSkills)
+    {
+        this.developersToSkills = developersToSkills;
     }
 
     @Override
@@ -83,7 +112,7 @@ public class Developers {
         if ( o == null || getClass() != o.getClass() ) {
             return false;
         }
-        Developers that = (Developers) o;
+        Developer that = (Developer) o;
         return id == that.id &&
                 age == that.age &&
                 Objects.equals( name, that.name ) &&
@@ -94,7 +123,6 @@ public class Developers {
     @Override
     public int hashCode()
     {
-
         return Objects.hash( id, name, age, address, salary );
     }
 }
