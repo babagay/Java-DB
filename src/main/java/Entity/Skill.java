@@ -1,6 +1,7 @@
 package Entity;
 
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
 
@@ -11,9 +12,13 @@ import java.util.Objects;
 /**
  * [issues]
  * В запросе, возвращающем rate, получается rate=null
+ *
+ * https://vladmihalcea.com/the-best-way-to-map-an-enum-type-with-jpa-and-hibernate/
+ * Mapping a Java Enum to a database-specific Enumarated column type
  */
 
-@TypeDef( name = "skillRate", defaultForType = Rate.class, typeClass = Rate.class)
+// @TypeDef( name = "skillRate", defaultForType = Rate.class, typeClass = Rate.class)
+@TypeDef( name = "skillRate",  typeClass = PostgreSQLEnumType.class)
 
 @Entity
 @Table (name = "skills", schema = "public", catalog = "postgres")
@@ -47,8 +52,10 @@ public class Skill {
         this.title = title;
     }
 
+    @Enumerated(EnumType.STRING)
+    // @Column (name = "rate", nullable = false)
+    @Column (columnDefinition = "PROGRAMMING_SKILL")
     @Type( type = "skillRate")
-    @Column (name = "rate", nullable = false)
     public Rate getRate()
     {
         return rate;

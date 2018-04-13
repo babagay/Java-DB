@@ -108,6 +108,8 @@ public class Custom {
                     .map( Developer::getName )
                     .forEach( System.out::println );
 
+            System.out.println(result2.get( 0 ));
+
 
             session.getTransaction().commit();
 
