@@ -1,7 +1,4 @@
-import Entity.Developer;
-import Entity.DevelopersToSkills;
-import Entity.Rate;
-import Entity.Skill;
+import Entity.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
@@ -27,6 +24,7 @@ import org.hibernate.query.Query;
  * Transient
  * Lob
  */
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
@@ -109,6 +107,28 @@ public class Custom {
                     .forEach( System.out::println );
 
             System.out.println(result2.get( 0 ));
+
+
+            SQL = "SELECT * from postgres.public.developers WHERE sex = 'MALE'";
+            List<Developer> result3 = session.createNativeQuery( SQL, Developer.class ).list();
+
+            System.out.println(result3.get( 0 ).getName()); // OK
+
+            /**
+             * Add Developer
+             */
+//            Developer dev = new Developer();
+//            dev.setName( "Tur Heerdal" );
+//            dev.setAge( 55 );
+//            dev.setSalary( BigDecimal.valueOf( 3000.0 ) );
+//            dev.setSex( Sex.MALE );
+//            session.save( dev );
+
+
+            // todo
+            // select * from skill
+
+
 
 
             session.getTransaction().commit();

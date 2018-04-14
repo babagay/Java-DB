@@ -1,26 +1,64 @@
 package Entity;
 
 
+import com.vladmihalcea.hibernate.type.basic.PostgreSQLEnumType;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 
+// Можно использовать либо optimizedSequence, либо SerialSequence для автогенерации ID
+// Но для optimizedSequence хибенейт требовал секвенцию DEVELOPER_SEQ - пришлось ее создать,
+// т.к. не понятно, как указать другую.
+// В то время, как в аннотации  SequenceGenerator имя используемой последовательности
+// сообщается через поле sequenceName
+@GenericGenerator (
+        name = "optimizedSequence",
+        strategy = "enhanced-sequence",
+        parameters = {
+                @Parameter (name = "prefer_sequence_per_entity", value = "true"),
+                @Parameter (name = "optimizer", value = "hilo"),
+                @Parameter (name = "increment_size", value = "50"),
+                @Parameter (name = "", value = "")
+        })
+@SequenceGenerator (name = "SerialSequence", sequenceName = "SERIAL", allocationSize = 1)
 @Entity
 @Table (name = "developers", schema = "public", catalog = "postgres")
+@TypeDef( name = "postgres_human_sex", typeClass = PostgreSQLEnumType.class)
 public class Developer {
     private int id;
     private String name;
     private int age;
+    private Sex sex;
     private String address;
     private BigDecimal salary;
 
     private Collection<DevelopersToProjects> projectsByDeveloperId;
     private Collection<DevelopersToSkills> developersToSkills;
 
+    @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "human_sex")
+    @Type( type = "postgres_human_sex")
+    public Sex getSex()
+    {
+        return sex;
+    }
+
+    public void setSex(Sex sex)
+    {
+        this.sex = sex;
+    }
+
     @Id
     @Column (name = "id", nullable = false)
+    // @GeneratedValue (generator = "optimizedSequence", strategy = GenerationType.AUTO) // OK
+    @GeneratedValue (generator = "SerialSequence", strategy = GenerationType.SEQUENCE)
     public int getId()
     {
         return id;
